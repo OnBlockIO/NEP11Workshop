@@ -179,10 +179,11 @@ class NEP11Test(BoaTest):
                                       signer_accounts=[self.OWNER_SCRIPT_HASH],
                                       expected_result_type=int)
 
+        ascii_img = self.get_ascii_image()
         # should fail because contract is paused
         with self.assertRaises(TestExecutionException, msg=self.ASSERT_RESULTED_FALSE_MSG):
             token = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'mint',
-                                            aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, None,
+                                            aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, ascii_img,
                                             signer_accounts=[aux_address],
                                             expected_result_type=bytes)
 
@@ -191,9 +192,10 @@ class NEP11Test(BoaTest):
                                       signer_accounts=[self.OWNER_SCRIPT_HASH],
                                       expected_result_type=int)
 
+        ascii_img = self.get_ascii_image()
         # mint
         token = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'mint',
-                                        aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, None,
+                                        aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, ascii_img,
                                         signer_accounts=[aux_address],
                                         expected_result_type=bytes)
         self.print_notif(engine.notifications)
@@ -222,28 +224,21 @@ class NEP11Test(BoaTest):
                                         signer_accounts=[aux_address],
                                         expected_result_type=bytes)
 
-        print("get props now: ")
         properties = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'properties', token, expected_result_type=bytes)
-        print("properties: " + str(properties))
         img = json.loads(str(properties).replace("\'", "\""))["ascii"]
-        print("props: \n" + img + "\n")
-        # royalties = self.run_smart_contract(
-        #     engine, self.CONTRACT_PATH_NEF, 'getRoyalties', token, expected_result_type=bytes)
-        # print("royalties: " + str(royalties))
+        royalties = self.run_smart_contract(
+            engine, self.CONTRACT_PATH_NEF, 'getRoyalties', token, expected_result_type=bytes)
+        with self.assertRaises(TestExecutionException, msg='An unhandled exception was thrown. Unable to parse metadata'):
+            properties = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'properties',
+                                                 bytes('thisisanonexistingtoken', 'utf-8'), expected_result_type=bytes)
 
-        # print('non existing props:')
-        # with self.assertRaises(TestExecutionException, msg='An unhandled exception was thrown. Unable to parse metadata'):
-        #     properties = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'properties',
-        #                                          bytes('thisisanonexistingtoken', 'utf-8'), expected_result_type=bytes)
-        # print("props: " + str(properties))
-
-        # # check balances after
-        # # nep11_amount_after = self.run_smart_contract(engine, GAS_SCRIPT, 'balanceOf', nep11_address)
-        # # gas_aux_after = self.run_smart_contract(engine, GAS_SCRIPT, 'balanceOf', aux_address)
-        # # nep11_balance_after = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'balanceOf', aux_address)
-        # nep11_supply_after = self.run_smart_contract(
-        #     engine, self.CONTRACT_PATH_NEF, 'totalSupply')
-        # self.assertEqual(1, nep11_supply_after)
+        # check balances after
+        # nep11_amount_after = self.run_smart_contract(engine, GAS_SCRIPT, 'balanceOf', nep11_address)
+        # gas_aux_after = self.run_smart_contract(engine, GAS_SCRIPT, 'balanceOf', aux_address)
+        # nep11_balance_after = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'balanceOf', aux_address)
+        nep11_supply_after = self.run_smart_contract(
+            engine, self.CONTRACT_PATH_NEF, 'totalSupply')
+        self.assertEqual(1, nep11_supply_after)
         self.print_notif(engine.notifications)
 
     def test_nep11_transfer(self):
@@ -263,9 +258,10 @@ class NEP11Test(BoaTest):
         add_amount = 10 * 10 ** 8
         engine.add_gas(aux_address, add_amount)
 
+        ascii_img = self.get_ascii_image()
         # mint
         token = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'mint',
-                                        aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, None,
+                                        aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, ascii_img,
                                         signer_accounts=[aux_address],
                                         expected_result_type=bytes)
         properties = self.run_smart_contract(
@@ -331,9 +327,10 @@ class NEP11Test(BoaTest):
         add_amount = 10 * 10 ** 8
         engine.add_gas(aux_address, add_amount)
 
+        ascii_img = self.get_ascii_image()
         # mint
         token = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'mint',
-                                        aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, None,
+                                        aux_address, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, ascii_img,
                                         signer_accounts=[aux_address],
                                         expected_result_type=bytes)
 
@@ -368,9 +365,10 @@ class NEP11Test(BoaTest):
         add_amount = 10 * 10 ** 8
         engine.add_gas(self.OTHER_ACCOUNT_1, add_amount)
 
+        ascii_img = self.get_ascii_image()
         # mint
         token = self.run_smart_contract(engine, self.CONTRACT_PATH_NEF, 'mint',
-                                        self.OTHER_ACCOUNT_1, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, None,
+                                        self.OTHER_ACCOUNT_1, self.TOKEN_META, self.TOKEN_LOCKED, self.ROYALTIES, ascii_img,
                                         signer_accounts=[self.OTHER_ACCOUNT_1],
                                         expected_result_type=bytes)
 

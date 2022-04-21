@@ -1,0 +1,41 @@
+Neo NFT Workshop:
+Mathias Enzensberger / Co-Founder OnBlockIO
+21/04/2022
+
+NEP11 (required):
+• symbol -> String (deterministic)
+• decimals -> Integer (deterministic) 
+• totalSupply -> Integer
+    - Returns the current total supply
+• balanceOf -> Integer
+    - Returns the total amount help by a specific address
+• tokensOf -> Iterator
+    - Returns the token ids held by a specific address (CATCH!)
+• transfer -> Boolean
+    - Transfers the token identified by its id
+    - If the receiver is a contract, it has to implement `onNEP11Payment` 
+• ownerOf -> Hash160 (UInt160) (Non-divisble)
+    - returns the owner of a token 
+
+
+NEP11 (optional):
+• tokens -> Iterator
+    - Returns "all" tokens minted by the contract, same catch as for tokensOf.
+• properties -> Map
+    - Returns a serialized NVM object containing the properties of an NFT
+
+Events emitted:
+    - Transfer(from, to, amount /* 1 */, tokenId)
+    - If a new token is created (minted) `from` has to be UInt160.Zero (null address)
+
+Let's build something!
+    - neo3-boa (contract + tests)
+    - NeoExpress (Private Net)
+    - Neo dotnet SDK (Client)
+
+Links:
+    - NEP11 Standard
+        https://github.com/neo-project/proposals/blob/master/nep-11.mediawiki
+        
+    - GitHub repo:
+        https://github.com/OnBlockIO/NEP11Workshop

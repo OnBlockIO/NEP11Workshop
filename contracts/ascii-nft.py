@@ -311,7 +311,6 @@ def properties(tokenId: bytes) -> Dict[str, str]:
     metaBytes = cast(str, get_meta(tokenId))
     assert len(metaBytes) != 0, 'No metadata available for token'
     metaObject = cast(Dict[str, str], json_deserialize(metaBytes))
-    tx = cast(Transaction, script_container)
 
     img = get_ascii_image(tokenId)
     current_blk_str = itoa(current_index)

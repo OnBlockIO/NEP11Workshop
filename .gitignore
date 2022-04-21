@@ -102,3 +102,7 @@ ENV/
 
 # asdf
 **TestEngine**
+**.manifest.json
+**.nef
+bin
+obj
