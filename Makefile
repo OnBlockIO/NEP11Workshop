@@ -39,8 +39,8 @@ install-neoxp:
 setup-testengine: $(TESTENGINE) build-contract install-neoxp
 	@# Help: Clone and build the TestEngine to run the contract tests, install neoxp if not found
 	@ cd $(CHAIN) && \
-		neoxp contract deploy --force ../$(CONTRACT_CORE)/ascii-nft.nef workshop && \
 		neoxp transfer 1000 GAS genesis workshop && \
+		neoxp contract deploy --force ../$(CONTRACT_CORE)/ascii-nft.nef workshop && \
 		neoxp transfer 1000 GAS genesis NfG6up2hDkvM59yE2cYmf1t7kxEpTRrc79
 
 $(TESTENGINE):
